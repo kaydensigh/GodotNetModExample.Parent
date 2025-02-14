@@ -1,0 +1,19 @@
+﻿Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GodotNetModExample.Parent", "GodotNetModExample.Parent\GodotNetModExample.Parent.csproj", "{A3D0F6D0-83CF-4301-9C81-0414A5AD982E}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+	Debug|Any CPU = Debug|Any CPU
+	ExportDebug|Any CPU = ExportDebug|Any CPU
+	ExportRelease|Any CPU = ExportRelease|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A3D0F6D0-83CF-4301-9C81-0414A5AD982E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3D0F6D0-83CF-4301-9C81-0414A5AD982E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3D0F6D0-83CF-4301-9C81-0414A5AD982E}.ExportDebug|Any CPU.ActiveCfg = ExportDebug|Any CPU
+		{A3D0F6D0-83CF-4301-9C81-0414A5AD982E}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
+		{A3D0F6D0-83CF-4301-9C81-0414A5AD982E}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
+		{A3D0F6D0-83CF-4301-9C81-0414A5AD982E}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+	EndGlobalSection
+EndGlobal
