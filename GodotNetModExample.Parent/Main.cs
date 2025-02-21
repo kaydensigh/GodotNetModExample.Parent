@@ -5,7 +5,6 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 using Godot;
-using NuGet.ProjectModel;
 
 public partial class Main : PanelContainer
 {
@@ -47,20 +46,16 @@ public partial class Main : PanelContainer
         GD.Print($"Loaded {assembly.FullName}: ");
 
         // Load dependencies.
-        var assets = LoadModAssetsJson(modName);
         var existingAssemblies = context.Assemblies.Select(_ => _.FullName.Split(',', 2)[0]);
         List<string> librariesToLoad = [];
-        foreach (var l in assets.Targets.First().Libraries)
+        foreach (var file in Directory.GetFiles(modPathAbs))
         {
-            if (l.RuntimeAssemblies.Count > 0 && !existingAssemblies.Contains(l.Name))
-            {
-                var dllPath = modPathAbs.PathJoin($"{l.Name}.dll");
-                if (File.Exists(dllPath))
-                {
-                    librariesToLoad.Add(dllPath);
-                    GD.Print($"- {l.Name} {l.Version}");
-                }
-            }
+            var libName = Path.GetFileNameWithoutExtension(file);
+            if (file.GetExtension() != "dll" || libName == modName || existingAssemblies.Contains(libName))
+                continue;
+
+            librariesToLoad.Add(file);
+            GD.Print(libName);
         }
         GD.Print();
         if (librariesToLoad.Count > 0)
@@ -83,14 +78,6 @@ public partial class Main : PanelContainer
         GD.Print($"{(loaded ? "Loaded" : "Failed to load")} {modName}.pck");
 
         return assembly;
-    }
-
-    private LockFile LoadModAssetsJson(string modName)
-    {
-        var modPathAbs = ProjectSettings.GlobalizePath(ModPath(modName));
-        var content = File.ReadAllText(modPathAbs.PathJoin("project.assets.json"));
-        var lockFileFormat = new LockFileFormat();
-        return lockFileFormat.Parse(content, "In Memory");
     }
 
     private void LsDir(string dir, int indent = 0)

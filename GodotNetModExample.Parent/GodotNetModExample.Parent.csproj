@@ -4,9 +4,6 @@
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="NuGet.ProjectModel" Version="6.13.1" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\GodotNetModExample.ParentLib\GodotNetModExample.ParentLib.csproj" />
   </ItemGroup>
 </Project>
