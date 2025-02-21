@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35707.178 d17.12
+VisualStudioVersion = 17.12.35707.178
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GodotNetModExample.Parent", "GodotNetModExample.Parent\GodotNetModExample.Parent.csproj", "{A3D0F6D0-83CF-4301-9C81-0414A5AD982E}"
 EndProject
@@ -11,6 +11,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		.gitattributes = .gitattributes
 		.gitignore = .gitignore
 	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GodotNetModExample.ParentLib", "GodotNetModExample.ParentLib\GodotNetModExample.ParentLib.csproj", "{7041E970-B0D9-4723-ABEF-5DE389977479}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,8 +27,17 @@ Global
 		{A3D0F6D0-83CF-4301-9C81-0414A5AD982E}.ExportDebug|Any CPU.Build.0 = ExportDebug|Any CPU
 		{A3D0F6D0-83CF-4301-9C81-0414A5AD982E}.ExportRelease|Any CPU.ActiveCfg = ExportRelease|Any CPU
 		{A3D0F6D0-83CF-4301-9C81-0414A5AD982E}.ExportRelease|Any CPU.Build.0 = ExportRelease|Any CPU
+		{7041E970-B0D9-4723-ABEF-5DE389977479}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7041E970-B0D9-4723-ABEF-5DE389977479}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7041E970-B0D9-4723-ABEF-5DE389977479}.ExportDebug|Any CPU.ActiveCfg = Release|Any CPU
+		{7041E970-B0D9-4723-ABEF-5DE389977479}.ExportDebug|Any CPU.Build.0 = Release|Any CPU
+		{7041E970-B0D9-4723-ABEF-5DE389977479}.ExportRelease|Any CPU.ActiveCfg = Release|Any CPU
+		{7041E970-B0D9-4723-ABEF-5DE389977479}.ExportRelease|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {3701D8D9-8B60-4131-89BD-6040B77C20C0}
 	EndGlobalSection
 EndGlobal
