@@ -1,10 +1,8 @@
-using System.Reflection;
 using System;
-using Godot;
-using System.IO;
 using System.Runtime.Loader;
+using Godot;
 
-public partial class Main : VBoxContainer
+public partial class Main : PanelContainer
 {
     public override void _Ready()
     {
@@ -22,15 +20,17 @@ public partial class Main : VBoxContainer
         foreach (var s in assembly.ExportedTypes)
             GD.Print(s);
 
+        var container = GetNode<Container>("Container");
+
         var modScene = GD.Load<PackedScene>(ModResourcePath + "SceneInMod.tscn");
         var modSceneNode = modScene.Instantiate<Control>();
-        modSceneNode.Name = "SceneInMod_Main";
-        AddChild(modSceneNode);
+        modSceneNode.Name = "SceneInMod";
+        container.AddChild(modSceneNode);
 
         var modClassType = assembly.GetType("GodotNetModExample.Parent.Mods.GodotNetModExample.Child.GodotClassInMod");
         var modClassNode = (Control)Activator.CreateInstance(modClassType);
-        modClassNode.Name = "GodotClassInMod_Main";
-        AddChild(modClassNode);
+        modClassNode.Name = "GodotClassInMod";
+        container.AddChild(modClassNode);
     }
 
     private void LsDir(string dir, int indent = 0)

@@ -1,11 +1,20 @@
-[gd_scene load_steps=2 format=3 uid="uid://cl7ghijntmk4f"]
+[gd_scene load_steps=3 format=3 uid="uid://cl7ghijntmk4f"]
 
+[ext_resource type="StyleBox" uid="uid://ut8ewfeyq45i" path="res://style_box.tres" id="1_al2ua"]
 [ext_resource type="Script" path="res://Main.cs" id="1_jfx6a"]
 
-[node name="Main" type="VBoxContainer"]
+[node name="Main" type="PanelContainer"]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_styles/panel = ExtResource("1_al2ua")
 script = ExtResource("1_jfx6a")
+
+[node name="Container" type="VBoxContainer" parent="."]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Container"]
+layout_mode = 2
+text = "Main"
