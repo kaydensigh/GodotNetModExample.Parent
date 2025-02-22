@@ -1,0 +1,3 @@
+[submodule "GodotNetModExample.Parent/Shared"]
+	path = GodotNetModExample.Parent/Shared
+	url = https://github.com/kaydensigh/GodotNetModExample.Shared

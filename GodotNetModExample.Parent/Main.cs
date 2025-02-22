@@ -41,7 +41,6 @@ public partial class Main : PanelContainer
         // See https://github.com/godotengine/godot/issues/75352#issuecomment-2481814309
         var context = AssemblyLoadContext.GetLoadContext(typeof(Godot.Bridge.ScriptManagerBridge).Assembly);
         var assembly = context.LoadFromAssemblyPath(modPathAbs.PathJoin($"{modName}.dll"));
-        Godot.Bridge.ScriptManagerBridge.LookupScriptsInAssembly(assembly);
 
         GD.Print($"Loaded {assembly.FullName}: ");
 
@@ -72,6 +71,9 @@ public partial class Main : PanelContainer
             if (!s.IsNested) GD.Print(s.Name);
         }
         GD.Print();
+
+        // Do this after loading all dependencies.
+        Godot.Bridge.ScriptManagerBridge.LookupScriptsInAssembly(assembly);
 
         // Don't replace files since we treat this as a mod not a patch.
         var loaded = ProjectSettings.LoadResourcePack(modPath.PathJoin($"{modName}.pck"), replaceFiles: false);
