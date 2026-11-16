@@ -2,7 +2,7 @@
   "profiles": {
     "GodotNetModExample.Parent": {
       "commandName": "Executable",
-      "executablePath": "%GODOT_BIN%",
+      "executablePath": "%GODOT_BIN_472%",
       "commandLineArgs": "--path . --verbose",
       "workingDirectory": ".",
       "nativeDebugging": true

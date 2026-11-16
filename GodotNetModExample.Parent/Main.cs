@@ -1,97 +1,55 @@
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.Loader;
 using Godot;
+using GodotNetModExample.Parent.Host;
+using GodotNetModExample.Shared;
 
 public partial class Main : PanelContainer
 {
     public override void _Ready()
     {
-        var modName = "GodotNetModExample.Child";
-        var modAssembly = LoadMod(modName);
+        // Before any scene that uses the shared library's scripts is loaded.
+        SharedScripts.Register();
 
         var container = GetNode<Container>("Container");
 
-        // Instantiate a scene from the mod.
-        var ModResourcePath = $"res://Mods/{modName}/";
-        var modScene = GD.Load<PackedScene>(ModResourcePath + "SceneInMod.tscn");
-        var modSceneNode = modScene.Instantiate<Control>();
-        modSceneNode.Name = "SceneInMod";
-        container.AddChild(modSceneNode);
+        foreach (var mod in ModLoader.LoadAll())
+        {
+            string name = mod.Manifest.Name;
+            GD.Print($"Mod {name}: {mod.Assembly.FullName}");
 
-        // Instantiate a class from the mod.
-        var modClassType = modAssembly.GetType($"{ModNamespace(modName)}.GodotClassInMod");
-        var modClassNode = (Control)Activator.CreateInstance(modClassType);
-        modClassNode.Name = "GodotClassInMod";
-        container.AddChild(modClassNode);
+            // Instantiate the mod's entry scene, whose root is a class of the mod's that derives from the host's.
+            var modScene = GD.Load<PackedScene>(mod.Manifest.EntryScene);
+            var modSceneNode = modScene.Instantiate<ModBase>();
+            modSceneNode.Name = "SceneInMod";
+            modSceneNode.HostName = "GodotNetModExample.Parent";
+            container.AddChild(modSceneNode);
+
+            // Instantiate a class from the mod.
+            var modClassType = mod.Assembly.GetType($"GodotNetModExample.Parent.Mods.{name}.GodotClassInMod");
+            var modClassNode = (Control)Activator.CreateInstance(modClassType);
+            modClassNode.Name = "GodotClassInMod";
+            container.AddChild(modClassNode);
+        }
+
+        if (OS.GetCmdlineUserArgs().Contains("--dump-tree"))
+            Callable.From(DumpTreeAndQuit).CallDeferred();
     }
 
-    private string ModPath(string modName) => $"user://Mods/{modName}/";
-    private string ModNamespace(string modName) => $"GodotNetModExample.Parent.Mods.{modName}";
-
-    private Assembly LoadMod(string modName)
+    /// <summary>
+    /// Prints every node with its class and any label's text, then quits: a run can be checked without a window.
+    /// </summary>
+    private void DumpTreeAndQuit()
     {
-        var modPath = ModPath(modName);
-        var modPathAbs = ProjectSettings.GlobalizePath(modPath);
+        Dump(this, 0);
+        GetTree().Quit();
 
-        // This is what works in 4.3.
-        // See https://github.com/godotengine/godot/issues/75352#issuecomment-2481814309
-        var context = AssemblyLoadContext.GetLoadContext(typeof(Godot.Bridge.ScriptManagerBridge).Assembly);
-        var assembly = context.LoadFromAssemblyPath(modPathAbs.PathJoin($"{modName}.dll"));
-
-        GD.Print($"Loaded {assembly.FullName}: ");
-
-        // Load dependencies.
-        var existingAssemblies = context.Assemblies.Select(_ => _.FullName.Split(',', 2)[0]);
-        List<string> librariesToLoad = [];
-        foreach (var file in Directory.GetFiles(modPathAbs))
+        static void Dump(Node node, int indent)
         {
-            var libName = Path.GetFileNameWithoutExtension(file);
-            if (file.GetExtension() != "dll" || libName == modName || existingAssemblies.Contains(libName))
-                continue;
-
-            librariesToLoad.Add(file);
-            GD.Print(libName);
-        }
-        GD.Print();
-        if (librariesToLoad.Count > 0)
-        {
-            foreach (var dllPath in librariesToLoad)
-            {
-                context.LoadFromAssemblyPath(dllPath);
-            }
-        }
-
-        GD.Print("Types:");
-        foreach (var s in assembly.ExportedTypes)
-        {
-            if (!s.IsNested) GD.Print(s.Name);
-        }
-        GD.Print();
-
-        // Do this after loading all dependencies.
-        Godot.Bridge.ScriptManagerBridge.LookupScriptsInAssembly(assembly);
-
-        // Don't replace files since we treat this as a mod not a patch.
-        var loaded = ProjectSettings.LoadResourcePack(modPath.PathJoin($"{modName}.pck"), replaceFiles: false);
-        GD.Print($"{(loaded ? "Loaded" : "Failed to load")} {modName}.pck");
-
-        return assembly;
-    }
-
-    private void LsDir(string dir, int indent = 0)
-    {
-        foreach (var subdir in DirAccess.GetDirectoriesAt(dir))
-        {
-            GD.Print($"{new string(' ', indent)}{subdir}:");
-            LsDir(dir.PathJoin(subdir), indent + 2);
-        }
-        foreach (var file in DirAccess.GetFilesAt(dir))
-        {
-            GD.Print($"{new string(' ', indent)}{file}");
+            string text = node is Label label ? $" \"{label.Text}\"" : "";
+            GD.Print($"{new string(' ', indent * 2)}{node.Name} [{node.GetType().FullName}]{text}");
+            foreach (var child in node.GetChildren())
+                Dump(child, indent + 1);
         }
     }
 }

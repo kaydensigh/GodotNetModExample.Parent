@@ -1,9 +1,12 @@
-<Project Sdk="Godot.NET.Sdk/4.3.0">
+<Project Sdk="Godot.NET.Sdk/4.7.2">
   <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <EnableDynamicLoading>true</EnableDynamicLoading>
   </PropertyGroup>
   <ItemGroup>
+    <!-- Shared/ is a library of its own. Compiled here as well, each of its scripts would be two classes with one
+         res:// path, which Godot refuses. -->
+    <Compile Remove="Shared\**" />
     <ProjectReference Include="..\GodotNetModExample.ParentLib\GodotNetModExample.ParentLib.csproj" />
     <ProjectReference Include="Shared\GodotNetModExample.Shared.csproj" />
   </ItemGroup>
